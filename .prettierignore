@@ -1,0 +1,6 @@
+# .prettierignore
+node_modules/
+public/
+
+eslint.config.mjs
+tsconfig.json

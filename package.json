@@ -1,0 +1,78 @@
+{
+    "name": "nf2",
+    "version": "1.0.0",
+    "description": "NF2 is A modular, opinionated, and lightweight backend framework for Node.js, built with TypeScript",
+    "keywords": [
+        "typescript",
+        "nodejs-framework",
+        "node-framework",
+        "backend",
+        "framework",
+        "express",
+        "routing",
+        "nodejs"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "nf2"
+    },
+    "license": "MIT",
+    "author": "Refkinscallv <refkinscallv@gmail.com>",
+    "main": "src/index.js",
+    "scripts": {
+        "tsc-init": "npx tsc --init",
+        "eslint-init": "npx eslint --init",
+        "build": "npx tsc",
+        "start": "node -r module-alias/register dist/index.js",
+        "dev": "nodemon",
+        "lint": "eslint . --ext .ts,.js",
+        "lint-fix": "eslint . --ext .ts,.js --fix",
+        "format": "prettier --ignore-path .prettierignore --write src/**/*.ts"
+    },
+    "_moduleAliases": {
+        "@core": "./dist/core",
+        "@app": "./dist/app",
+        "@type": "./dist/types"
+    },
+    "dependencies": {
+        "axios": "^1.10.0",
+        "bcrypt": "^6.0.0",
+        "chalk": "^5.4.1",
+        "class-transformer": "^0.5.1",
+        "class-validator": "^0.14.2",
+        "cookie-parser": "^1.4.7",
+        "cors": "^2.8.5",
+        "dotenv": "^17.2.0",
+        "express": "^5.1.0",
+        "jsonwebtoken": "^9.0.2",
+        "lodash": "^4.17.21",
+        "module-alias": "^2.2.3",
+        "mysql2": "^3.14.2",
+        "nodemailer": "^7.0.5",
+        "qs": "^6.14.0",
+        "reflect-metadata": "^0.2.2",
+        "socket.io": "^4.8.1",
+        "typeorm": "^0.3.25"
+    },
+    "devDependencies": {
+        "@eslint/js": "^9.31.0",
+        "@types/bcrypt": "^5.0.2",
+        "@types/cookie-parser": "^1.4.9",
+        "@types/cors": "^2.8.19",
+        "@types/express": "^5.0.3",
+        "@types/jsonwebtoken": "^9.0.10",
+        "@types/lodash": "^4.17.20",
+        "@types/node": "^24.0.14",
+        "@types/nodemailer": "^6.4.17",
+        "eslint": "^9.31.0",
+        "eslint-config-prettier": "^10.1.5",
+        "eslint-plugin-prettier": "^5.5.1",
+        "globals": "^16.3.0",
+        "nodemon": "^3.1.10",
+        "prettier": "^3.6.2",
+        "ts-node": "^10.9.2",
+        "tsconfig-paths": "^4.2.0",
+        "typescript": "^5.8.3",
+        "typescript-eslint": "^8.37.0"
+    }
+}
