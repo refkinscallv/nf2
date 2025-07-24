@@ -34,6 +34,73 @@ src/
 
 ---
 
+## ⚙️ Configuration (.env)
+
+```env
+# ============================================
+# APPLICATION
+# ============================================
+APP_ENV=development                             # Defines the environment where the app is running (e.g., development, production)
+APP_PORT=3456                                   # Optional port for running the application locally
+APP_URL=http://localhost:3456                   # Base URL for the application; remove port in production
+APP_NAME=NF2                                    # Application name (optional, use as needed globally)
+APP_TIMEZONE=UTC                                # Sets the timezone for app logic and data storage (recommended: UTC)
+
+# ============================================
+# DATABASE CONFIGURATION
+# ============================================
+DB_STATUS=off                                   # Enable or disable database connection (off = app runs without DB)
+DB_TYPE=mysql                                   # Type of database: mysql, postgres, sqlite, mongodb, oracle
+DB_HOST=localhost                               # Hostname where the database is running
+DB_PORT=3306                                    # Port number for the DB server
+DB_USER=root                                    # Database username
+DB_PASS=                                        # Database password (leave empty if not required)
+DB_NAME=                                        # Name of the database
+DB_CHARSET=utf8mb4_general_ci                   # Character set used for database tables (MySQL only)
+DB_LOGGING=off                                  # Enable or disable query logging
+DB_SYNC=on                                      # Auto-create DB schema based on entities (use with caution)
+DB_SEED=off                                     # Automatically run database seeders (TypeORM sync)
+
+# ===== PostgreSQL Only =====
+DB_SCHEMA=public                                # Schema name used in PostgreSQL. Only used when DB_TYPE is 'postgres'
+
+# ===== SQLite Only =====
+DB_PATH=database.sqlite                         # Path to SQLite database file. Only used when DB_TYPE is 'sqlite'
+
+# ===== MongoDB Only =====
+DB_URL=mongodb://localhost:27017                # Connection string for MongoDB. Only used when DB_TYPE is 'mongodb'
+
+# ===== Oracle Only =====
+DB_SID=xe                                       # Oracle System ID (SID). Only used when DB_TYPE is 'oracle'
+DB_CONNECT_STRING=localhost/XEPDB1              # Oracle connection string. Only used when DB_TYPE is 'oracle'
+
+# ============================================
+# JWT AUTHENTICATION
+# ============================================
+JWT_SECRET_KEY=                                 # Secret key used to sign JWT tokens
+JWT_EXPIRE_IN=86400                             # Token expiration time in seconds (e.g., 86400 = 24 hours)
+
+# ============================================
+# COOKIE
+# ============================================
+COOKIE_NAME=nf2_session                         # Cookie name used for session tracking
+COOKIE_SECRET=                                  # Secret used to sign/encrypt cookies
+COOKIE_EXPIRE=86400                             # Cookie expiration time in seconds (e.g., 86400 = 24 hours)
+COOKIE_PATH=/                                   # Cookie valid path
+COOKIE_SECURE=false                             # Use true for HTTPS environments
+COOKIE_HTTP_ONLY=true                           # Prevent JavaScript access to cookies (security best practice)
+
+# ============================================
+# MAILER
+# ============================================
+MAIL_DRIVER=gmail                               # Email service provider (e.g., smtp, sendgrid, gmail)
+MAIL_USER=youremail@gmail.com                   # Email address used to send mails
+MAIL_PASS=                                      # Password or app-specific password for mail authentication
+MAIL_NAME=NF2                                   # Name that appears as the sender
+```
+
+---
+
 ## ⚙️ Setup & Installation
 
 ### 1. Clone and Install

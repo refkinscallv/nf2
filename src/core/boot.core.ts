@@ -4,6 +4,7 @@ import CoreExpress from '@core/express.core';
 import CoreServer from '@core/server.core';
 import CoreTypeorm from '@core/typeorm.core';
 import CoreHook from '@core/hooks.core';
+import CoreCommon from '@core/common.core';
 
 export default class CoreBoot {
     public static async run() {
@@ -11,7 +12,9 @@ export default class CoreBoot {
 
         try {
             await CoreHook.init('system', 'before');
-            await CoreTypeorm.init();
+            if (CoreCommon.env('DB_STATUS') === 'on') {
+                await CoreTypeorm.init();
+            }
 
             CoreExpress.init();
             CoreServer.init();

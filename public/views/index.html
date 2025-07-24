@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NF2</title>
+    <link rel="shortcut icon" href="/static/nf2.png" type="image/x-icon" />
+
+    <!-- CSS Dependencies -->
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5/themes.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css" />
+
+    <!-- JS Dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+    <!-- Font & Custom Scrollbar -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap');
+
+        html, body {
+            font-family: "Quicksand", serif !important;
+            font-optical-sizing: auto;
+            font-size: 14px !important;
+            width: 100%;
+            margin: auto;
+        }
+
+        *, *::after, *::before {
+            box-sizing: border-box;
+            scrollbar-width: none;
+            scrollbar-color: rgba(175, 184, 196, 0.8) transparent;
+            user-select: none;
+        }
+
+        *::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        *::-webkit-scrollbar-track {
+            background: transparent;
+            border-radius: 10px;
+            margin: 4px;
+        }
+
+        *::-webkit-scrollbar-thumb {
+            background-color: rgba(175, 184, 196, 0.8);
+            border-radius: 10px;
+            border: 2px solid transparent;
+            background-clip: padding-box;
+        }
+
+        *::-webkit-scrollbar-thumb:hover {
+            background-color: rgba(150, 160, 180, 0.9);
+        }
+
+        * {
+            transition: all 0.2s;
+        }
+    </style>
+
+    <script>
+        (() => {
+            const savedTheme = localStorage.getItem('nf2Theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+        })();
+    </script>
+</head>
+<body>
+
+    <!-- Modal Theme Selector -->
+    <dialog id="change_theme_modal" class="modal">
+        <div class="modal-box">
+            <h3 class="text-lg font-bold">Try another theme from daisyUI</h3>
+            <div id="detail"></div>
+        </div>
+        <form method="dialog" class="modal-backdrop">
+            <button>close</button>
+        </form>
+    </dialog>
+
+    <main class="w-screen h-screen overflow-auto">
+        <section class="flex flex-col items-center justify-center p-5 text-center min-h-full w-full">
+            <h1 class="text-4xl font-semibold">
+                Welcome to <span class="text-primary font-bold">NF2</span>
+            </h1>
+            <p class="my-[20px] text-base-content/80 italic">
+                - A Modular, Opinionated, and Lightweight backend framework for Node.js built with TypeScript, Express.js, and TypeORM -
+            </p>
+            <div class="flex items-center gap-3 mb-[10px]">
+                <a href="https://github.com/refkinscallv/nf2" target="_blank" class="btn btn-outline btn-primary">
+                    <i class="ri-download-cloud-line me-2"></i> Clone
+                </a>
+                <a href="https://github.com/refkinscallv/nf2/blob/main/README.md" target="_blank" class="btn btn-outline btn-primary">
+                    <i class="ri-book-line me-2"></i> Docs
+                </a>
+            </div>
+            <div class="flex flex-row items-center gap-3 mb-[20px]">
+                <a class="github-button" href="https://github.com/refkinscallv/nf2" data-icon="octicon-star" data-size="large" data-show-count="true" aria-label="Star refkinscallv/nf2 on GitHub">Star</a>
+                <a class="github-button" href="https://github.com/refkinscallv/nf2/fork" data-icon="octicon-repo-forked" data-size="large" data-show-count="true" aria-label="Fork refkinscallv/nf2 on GitHub">Fork</a>
+                <a class="github-button" href="https://github.com/refkinscallv/nf2/subscription" data-icon="octicon-eye" data-size="large" data-show-count="true" aria-label="Watch refkinscallv/nf2 on GitHub">Watch</a>
+                <a class="github-button" href="https://github.com/sponsors/refkinscallv" data-icon="octicon-heart" data-size="large" aria-label="Sponsor @refkinscallv on GitHub">Sponsor</a>
+            </div>
+            <div class="text-center">developed by <a href="https://fb.com/refkinscallv" class="!underline" target="_blank" rel="nofollow, noindex">Refkinscallv</a></div>
+        </section>
+
+        <!-- Theme Switch Buttons -->
+        <button class="fixed top-[20px] right-[20px] btn btn-circle" id="nf2-theme-toggle">
+            <i class="ri-moon-line" id="icon"></i>
+        </button>
+        <button class="fixed top-[70px] right-[20px] btn btn-circle" onclick="openChangeTheme()">
+            <i class="ri-brush-ai-line"></i>
+        </button>
+    </main>
+
+    <script>
+        const themeKey = 'nf2Theme';
+        const themeToggleBtn = $('#nf2-theme-toggle');
+
+        themeToggleBtn.click(function () {
+            const currentTheme = $("html").attr("data-theme");
+            const newTheme = currentTheme === "dark" ? "light" : "dark";
+            $("html").attr("data-theme", newTheme);
+            localStorage.setItem(themeKey, newTheme);
+            updateThemeIcon(newTheme);
+        });
+
+        function updateThemeIcon(theme) {
+            const iconClass = theme === "dark" ? "ri-sun-line" : "ri-moon-line";
+            $('#icon').attr('class', iconClass);
+        }
+
+        function changeTheme(theme) {
+            $("html").attr("data-theme", theme);
+            localStorage.setItem(themeKey, theme);
+            updateThemeIcon(theme);
+        }
+
+        function openChangeTheme() {
+            const modal = $('#change_theme_modal');
+            const detail = modal.find('#detail');
+            modal[0].showModal();
+
+            const themeList = {
+                light: 'Light',
+                dark: 'Dark',
+                cupcake: 'Cupcake',
+                bumblebee: 'Bumblebee',
+                emerald: 'Emerald',
+                corporate: 'Corporate',
+                synthwave: 'Synthwave',
+                retro: 'Retro',
+                cyberpunk: 'Cyberpunk',
+                valentine: 'Valentine',
+                halloween: 'Halloween',
+                garden: 'Garden',
+                forest: 'Forest',
+                aqua: 'Aqua',
+                lofi: 'Lofi',
+                pastel: 'Pastel',
+                fantasy: 'Fantasy',
+                wireframe: 'Wireframe',
+                black: 'Black',
+                luxury: 'Luxury',
+                dracula: 'Dracula',
+                cmyk: 'CMYK',
+                autumn: 'Autumn',
+                business: 'Business',
+                acid: 'Acid',
+                lemonade: 'Lemonade',
+                night: 'Night',
+                coffee: 'Coffee',
+                winter: 'Winter',
+                dim: 'Dim',
+                nord: 'Nord',
+                sunset: 'Sunset',
+                caramellatte: 'Caramellatte',
+                abyss: 'Abyss',
+                silk: 'Silk'
+            };
+
+            detail.html(`<div class="text-sm text-base-300 text-center">Loading...</div>`);
+
+            let buttons = '';
+            $.each(themeList, (key, label) => {
+                buttons += `<button type="button" class="btn btn-primary btn-sm m-2" onclick="changeTheme('${key}'); change_theme_modal.close()">${label}</button>`;
+            });
+
+            detail.html(buttons);
+        }
+
+        $(document).ready(function () {
+            updateThemeIcon(localStorage.getItem(themeKey));
+            $('#change_theme_modal').on('close', () => {
+                $('#detail').empty();
+            });
+        });
+    </script>
+</body>
+</html>
