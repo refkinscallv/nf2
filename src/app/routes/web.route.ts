@@ -1,6 +1,5 @@
 import Route from '@core/route.core';
 import { HttpContext } from '@type/core';
-import CoreCommon from '@core/common.core';
 import path from 'path';
 
 Route.get('/', ({ res }: HttpContext) => {
