@@ -9,18 +9,35 @@ export default class CoreMailer {
     private static getTransport(): Transporter {
         if (this.transport) return this.transport;
 
-        const service = CoreCommon.env<string>('MAIL_DRIVER');
+        const driver = CoreCommon.env<string>('MAIL_DRIVER', 'smtp');
         const user = CoreCommon.env<string>('MAIL_USER');
         const pass = CoreCommon.env<string>('MAIL_PASS');
 
-        if (!service || !user || !pass) {
+        if (!driver || !user || !pass) {
             throw new Error('[MAILER] Missing required mail configuration');
         }
 
-        this.transport = nodemailer.createTransport({
-            service,
-            auth: { user, pass },
-        });
+        if (driver.toLowerCase() === 'smtp') {
+            const host = CoreCommon.env<string>('MAIL_HOST');
+            const port = CoreCommon.env<number>('MAIL_PORT', 587);
+            const secure = CoreCommon.env<boolean>('MAIL_SECURE', false);
+
+            if (!host) {
+                throw new Error('[MAILER] SMTP host is required for SMTP driver');
+            }
+
+            this.transport = nodemailer.createTransport({
+                host,
+                port,
+                secure,
+                auth: { user, pass },
+            });
+        } else {
+            this.transport = nodemailer.createTransport({
+                service: driver,
+                auth: { user, pass },
+            });
+        }
 
         return this.transport;
     }
