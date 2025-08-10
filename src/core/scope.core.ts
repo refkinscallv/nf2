@@ -6,9 +6,7 @@ import CoreHook from '@core/hooks.core';
 process.env.TZ = CoreCommon.env<string>('APP_TIMEZONE', 'UTC');
 
 const isDev = (): boolean => {
-    return ['development', 'develop', 'dev'].includes(
-        CoreCommon.env<string>('APP_ENV', 'production').toLowerCase(),
-    );
+    return ['development', 'develop', 'dev'].includes(CoreCommon.env<string>('APP_ENV', 'production').toLowerCase());
 };
 
 const suppressLog =

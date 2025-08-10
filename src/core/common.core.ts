@@ -13,12 +13,8 @@ export default class CoreCommon {
     public static url(base: CoreCommonUrl = 'base', path: string = ''): string {
         const baseUrls: Record<CoreCommonUrl, string> = {
             base: CoreCommon.env<string>('APP_URL', 'http://localhost:3000'),
-            api:
-                CoreCommon.env<string>('APP_URL', 'http://localhost:3000') +
-                '/api',
-            static:
-                CoreCommon.env<string>('APP_URL', 'http://localhost:3000') +
-                '/static',
+            api: CoreCommon.env<string>('APP_URL', 'http://localhost:3000') + '/api',
+            static: CoreCommon.env<string>('APP_URL', 'http://localhost:3000') + '/static',
         };
 
         const cleanBase = baseUrls[base].replace(/\/+$/, '');
@@ -33,10 +29,7 @@ export default class CoreCommon {
         return resolve(root, ...cleanPaths);
     }
 
-    public static extractUrl(
-        fullUrl: string,
-        get: Exclude<keyof URL, 'toJSON'>,
-    ): string | URL[keyof URL] {
+    public static extractUrl(fullUrl: string, get: Exclude<keyof URL, 'toJSON'>): string | URL[keyof URL] {
         try {
             const url = new URL(fullUrl);
             return url[get];
@@ -45,20 +38,11 @@ export default class CoreCommon {
         }
     }
 
-    public static json(
-        status = true,
-        code = 200,
-        message = '',
-        result: Record<string, any> | any[] | null = {},
-        custom: Partial<Record<string, any>> = {},
-    ) {
+    public static json(status = true, code = 200, message = '', result: Record<string, any> | any[] | null = {}, custom: Partial<Record<string, any>> = {}) {
         return { status, code, message, result, ...custom };
     }
 
-    public static async handler<T>(
-        callback: () => Promise<T>,
-        shouldThrow?: (err: any) => T | Promise<T> | void,
-    ): Promise<T> {
+    public static async handler<T>(callback: () => Promise<T>, shouldThrow?: (err: any) => T | Promise<T> | void): Promise<T> {
         try {
             return await callback();
         } catch (err) {
@@ -77,9 +61,7 @@ export default class CoreCommon {
     public static uniqid(prefix = '', moreEntropy = false): string {
         const now = Date.now().toString(16);
         const random = Math.floor(Math.random() * 0xfffff).toString(16);
-        const entropy = moreEntropy
-            ? '.' + process.hrtime.bigint().toString(36)
-            : '';
+        const entropy = moreEntropy ? '.' + process.hrtime.bigint().toString(36) : '';
         return `${prefix}${now}${random}${entropy}`;
     }
 
@@ -90,8 +72,7 @@ export default class CoreCommon {
     public static isEmpty(val: any): boolean {
         if (typeof val === 'undefined') return true;
         if (val == null) return true;
-        if (typeof val === 'string' || Array.isArray(val))
-            return val.length === 0;
+        if (typeof val === 'string' || Array.isArray(val)) return val.length === 0;
         if (typeof val === 'object') return Object.keys(val).length === 0;
         return false;
     }
@@ -102,8 +83,7 @@ export default class CoreCommon {
 
     public static toBool(val: any): boolean {
         if (typeof val === 'boolean') return val;
-        if (typeof val === 'string')
-            return ['true', '1', 'yes', 'on'].includes(val.toLowerCase());
+        if (typeof val === 'string') return ['true', '1', 'yes', 'on'].includes(val.toLowerCase());
         return Boolean(val);
     }
 
@@ -112,9 +92,7 @@ export default class CoreCommon {
     }
 
     public static snakeCase(str: string): string {
-        return str
-            .replace(/[A-Z]/g, (letter) => `_${letter.toLowerCase()}`)
-            .replace(/^_/, '');
+        return str.replace(/[A-Z]/g, (letter) => `_${letter.toLowerCase()}`).replace(/^_/, '');
     }
 
     public static className(instance: any): string {

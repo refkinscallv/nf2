@@ -28,10 +28,7 @@ export default class CoreExpress {
             CoreCookie.init(req, res);
             next();
         });
-        this.express.use(
-            ExpressConfig.static.route,
-            express.static(ExpressConfig.static.path),
-        );
+        this.express.use(ExpressConfig.static.route, express.static(ExpressConfig.static.path));
         RegisterMiddleware.set(this.express);
     }
 
@@ -72,11 +69,7 @@ export default class CoreExpress {
         return res.status(response.code).json(response);
     }
 
-    public static redirect(
-        res: Response,
-        url: string,
-        statusCode: number = 302,
-    ): Response {
+    public static redirect(res: Response, url: string, statusCode: number = 302): Response {
         return res.redirect(statusCode, url) as unknown as Response;
     }
 }

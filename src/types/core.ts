@@ -34,24 +34,12 @@ export interface PaginateResult<T> {
 /**
  * Middleware function type for Express routes.
  */
-export type RouteMiddleware = (
-    req: Request,
-    res: Response,
-    next: NextFunction,
-) => void;
+export type RouteMiddleware = (req: Request, res: Response, next: NextFunction) => void;
 
 /**
  * HTTP methods supported by the routing system.
  */
-export type RouteMethod =
-    | 'get'
-    | 'post'
-    | 'put'
-    | 'patch'
-    | 'delete'
-    | 'options'
-    | 'head'
-    | 'all';
+export type RouteMethod = 'get' | 'post' | 'put' | 'patch' | 'delete' | 'options' | 'head' | 'all';
 
 /**
  * HTTP context passed to route handlers.
@@ -65,10 +53,7 @@ export type HttpContext = {
 /**
  * Route handler can be a function or a [Controller, method] tuple.
  */
-export type RouteHandler =
-    | ((ctx: HttpContext) => any)
-    | [new () => any, string]
-    | [any, string];
+export type RouteHandler = ((ctx: HttpContext) => any) | [new () => any, string] | [any, string];
 
 /**
  * Route definition interface.
@@ -80,13 +65,7 @@ export interface RouteDefinition {
     middlewares?: RouteMiddleware[];
 }
 
-export type TypeOrmDialect =
-    | 'common'
-    | 'mysql'
-    | 'postgres'
-    | 'sqlite'
-    | 'mongodb'
-    | 'oracle';
+export type TypeOrmDialect = 'common' | 'mysql' | 'postgres' | 'sqlite' | 'mongodb' | 'oracle';
 
 export type HookType = 'before' | 'after' | 'shutdown';
 export type Subsystem = 'system';

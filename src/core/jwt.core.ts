@@ -17,19 +17,14 @@ export default class CoreJwt {
         return parsed;
     })();
 
-    public static sign<T extends JwtPayload>(
-        payload: T,
-        options: SignOptions = {},
-    ): string {
+    public static sign<T extends JwtPayload>(payload: T, options: SignOptions = {}): string {
         return jwt.sign(payload, this.secretKey, {
             expiresIn: this.expireIn,
             ...options,
         });
     }
 
-    public static verify<T = any>(
-        token?: string | null,
-    ): { status: boolean; result: T | string } {
+    public static verify<T = any>(token?: string | null): { status: boolean; result: T | string } {
         if (!token) return { status: false, result: 'Token is missing' };
 
         try {

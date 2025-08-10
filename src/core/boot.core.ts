@@ -21,9 +21,7 @@ export default class CoreBoot {
 
             console.log(`[BOOT] Successfully booted the application`);
         } catch (error: any | unknown) {
-            throw new Error(
-                `[BOOT] Failed to boot the application: ${error?.message || error}`,
-            );
+            throw new Error(`[BOOT] Failed to boot the application: ${error?.message || error}`);
         }
     }
 }

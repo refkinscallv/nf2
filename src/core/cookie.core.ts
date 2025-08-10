@@ -10,14 +10,8 @@ export default class CoreCookie {
     private static res: Response | null = null;
     private static cache: Record<string, any> | null = null;
 
-    private static readonly cookieName = CoreCommon.env(
-        'COOKIE_NAME',
-        'node_framework_cookie',
-    );
-    private static readonly secret = CoreCommon.env(
-        'COOKIE_SECRET',
-        'default_cookie_secret',
-    );
+    private static readonly cookieName = CoreCommon.env('COOKIE_NAME', 'node_framework_cookie');
+    private static readonly secret = CoreCommon.env('COOKIE_SECRET', 'default_cookie_secret');
 
     public static init(req: Request, res: Response) {
         this.req = req;
@@ -46,11 +40,7 @@ export default class CoreCookie {
         return full[keys];
     }
 
-    public static set(
-        key: string | Record<string, any>,
-        value?: any,
-        options: Partial<CookieOptions> = {},
-    ): boolean {
+    public static set(key: string | Record<string, any>, value?: any, options: Partial<CookieOptions> = {}): boolean {
         if (!this.res) return false;
 
         const current = this.#readCookie() || {};
@@ -64,10 +54,7 @@ export default class CoreCookie {
         return this.#writeCookie(current, options);
     }
 
-    public static remove(
-        keys: string | string[],
-        options: Partial<CookieOptions> = {},
-    ): boolean {
+    public static remove(keys: string | string[], options: Partial<CookieOptions> = {}): boolean {
         if (!this.res) return false;
 
         const current = this.#readCookie() || {};
@@ -102,10 +89,7 @@ export default class CoreCookie {
         }
     }
 
-    static #writeCookie(
-        data: Record<string, any>,
-        options: Partial<CookieOptions> = {},
-    ): boolean {
+    static #writeCookie(data: Record<string, any>, options: Partial<CookieOptions> = {}): boolean {
         if (!this.res) return false;
 
         try {
@@ -130,10 +114,7 @@ export default class CoreCookie {
         const iv = crypto.randomBytes(16);
         const key = crypto.createHash('sha256').update(this.secret).digest();
         const cipher = crypto.createCipheriv('aes-256-cbc', key, iv);
-        const encrypted = Buffer.concat([
-            cipher.update(plain, 'utf8'),
-            cipher.final(),
-        ]);
+        const encrypted = Buffer.concat([cipher.update(plain, 'utf8'), cipher.final()]);
         return `${iv.toString('hex')}:${encrypted.toString('hex')}`;
     }
 
@@ -145,10 +126,7 @@ export default class CoreCookie {
         const encrypted = Buffer.from(dataHex, 'hex');
         const key = crypto.createHash('sha256').update(this.secret).digest();
         const decipher = crypto.createDecipheriv('aes-256-cbc', key, iv);
-        const decrypted = Buffer.concat([
-            decipher.update(encrypted),
-            decipher.final(),
-        ]);
+        const decrypted = Buffer.concat([decipher.update(encrypted), decipher.final()]);
         return decrypted.toString('utf8');
     }
 }

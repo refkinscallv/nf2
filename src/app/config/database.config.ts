@@ -2,11 +2,7 @@ import CoreCommon from '@core/common.core';
 
 export default class DatabaseConfig {
     public static common: Record<string, any> = {
-        entities: [
-            CoreCommon.env<string>('APP_ENV', 'development') === 'development'
-                ? 'src/app/database/entities/*.{ts,js}'
-                : 'dist/app/database/entities/*.js',
-        ],
+        entities: [CoreCommon.env<string>('APP_ENV', 'development') === 'development' ? 'src/app/database/entities/*.{ts,js}' : 'dist/app/database/entities/*.js'],
         synchronize: CoreCommon.env<string>('DB_SYNC', 'off') === 'on',
         logging: CoreCommon.env<string>('DB_LOGGING', 'off') === 'on',
         charset: CoreCommon.env<string>('DB_CHARSET', 'utf8mb4_general_ci'),

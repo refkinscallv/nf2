@@ -5,10 +5,7 @@ import { PaginateParams, PaginateResult } from '@type/core';
 import CoreTypeorm from '@core/typeorm.core';
 
 export default class CorePaginate {
-    public static async make<T extends ObjectLiteral>(
-        repo: Repository<T>,
-        params: PaginateParams<T>,
-    ): Promise<PaginateResult<T>> {
+    public static async make<T extends ObjectLiteral>(repo: Repository<T>, params: PaginateParams<T>): Promise<PaginateResult<T>> {
         const page = Math.max(1, Number(params.page) || 1);
         const limit = Math.max(1, Number(params.limit) || 10);
         const offset = (page - 1) * limit;

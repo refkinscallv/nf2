@@ -6,13 +6,8 @@ import CoreExpress from '@core/express.core';
 import CoreHook from '@core/hooks.core';
 
 export default class CoreServer {
-    private static readonly port = Number(
-        CoreCommon.env<number>('APP_PORT', 3000),
-    );
-    private static readonly url = CoreCommon.env<string>(
-        'APP_URL',
-        `http://localhost:${CoreServer.port}`,
-    );
+    private static readonly port = Number(CoreCommon.env<number>('APP_PORT', 3000));
+    private static readonly url = CoreCommon.env<string>('APP_URL', `http://localhost:${CoreServer.port}`);
     private static readonly server = http.createServer(CoreExpress.express);
 
     public static getHttpServer(): http.Server {

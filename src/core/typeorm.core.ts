@@ -1,12 +1,7 @@
 'use strict';
 
 import 'reflect-metadata';
-import {
-    DataSource,
-    DataSourceOptions,
-    ObjectLiteral,
-    Repository,
-} from 'typeorm';
+import { DataSource, DataSourceOptions, ObjectLiteral, Repository } from 'typeorm';
 import CoreCommon from '@core/common.core';
 import DatabaseConfig from '@app/config/database.config';
 import RegisterSeeder from '@app/database/seeders/register.seeder';
@@ -18,9 +13,7 @@ export default class CoreTypeorm {
 
     public static get instance(): DataSource {
         if (!this.datasource) {
-            throw new Error(
-                '[DATABASE] Database not initialized. Call `CoreTypeorm.init()` first.',
-            );
+            throw new Error('[DATABASE] Database not initialized. Call `CoreTypeorm.init()` first.');
         }
         return this.datasource;
     }
@@ -29,9 +22,7 @@ export default class CoreTypeorm {
         this.databaseType = CoreCommon.env<TypeOrmDialect>('DB_TYPE', 'mysql');
 
         if (!DatabaseConfig[this.databaseType]) {
-            throw new Error(
-                `[DATABASE] Database configuration for type '${this.databaseType}' not found.`,
-            );
+            throw new Error(`[DATABASE] Database configuration for type '${this.databaseType}' not found.`);
         }
 
         return {
@@ -50,25 +41,18 @@ export default class CoreTypeorm {
 
         try {
             await this.datasource.initialize();
-            console.log(
-                `[DATABASE] Database initialized successfully: ${this.databaseType}`,
-            );
+            console.log(`[DATABASE] Database initialized successfully: ${this.databaseType}`);
 
             if (CoreCommon.env<string>('DB_SEED', 'off') === 'on') {
                 await RegisterSeeder();
                 console.log('[DATABASE] Seeders executed successfully.');
             }
         } catch (err: any) {
-            throw new Error(
-                `[DATABASE] Failed to initialize database: ${err?.message || err}`,
-            );
+            throw new Error(`[DATABASE] Failed to initialize database: ${err?.message || err}`);
         }
     }
 
-    public static async executeSeed<T extends ObjectLiteral>({
-        entity,
-        data,
-    }: RunSeederType<T>) {
+    public static async executeSeed<T extends ObjectLiteral>({ entity, data }: RunSeederType<T>) {
         const repository = this.getRepository(entity);
         const entityName = entity.name.replace(/(Entity)?$/i, '');
 
@@ -79,24 +63,14 @@ export default class CoreTypeorm {
 
         const allColumns = Object.keys(data[0]);
 
-        await repository
-            .createQueryBuilder()
-            .insert()
-            .into(entity)
-            .values(data)
-            .orUpdate(allColumns, allColumns)
-            .execute();
+        await repository.createQueryBuilder().insert().into(entity).values(data).orUpdate(allColumns, allColumns).execute();
 
         console.log(`[SEEDER] '${entityName}' seeded successfully`);
     }
 
-    public static getRepository<T extends ObjectLiteral>(entity: {
-        new (): T;
-    }): Repository<T> {
+    public static getRepository<T extends ObjectLiteral>(entity: { new (): T }): Repository<T> {
         if (!this.datasource?.isInitialized) {
-            throw new Error(
-                '[DATABASE] Not initialized. Call `CoreTypeorm.init()` first.',
-            );
+            throw new Error('[DATABASE] Not initialized. Call `CoreTypeorm.init()` first.');
         }
 
         return this.datasource.getRepository(entity);

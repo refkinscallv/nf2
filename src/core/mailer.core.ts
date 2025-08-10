@@ -42,22 +42,13 @@ export default class CoreMailer {
         return this.transport;
     }
 
-    public static async send({
-        to,
-        subject,
-        html,
-    }: {
-        to: string | string[];
-        subject: string;
-        html: string;
-    }) {
+    public static async send({ to, subject, html }: { to: string | string[]; subject: string; html: string }) {
         const fromName = CoreCommon.env('MAIL_NAME', 'noreply');
         const fromEmail = CoreCommon.env('MAIL_USER', 'noreply@example.com');
         const from = `${fromName} <${fromEmail}>`;
 
         return CoreCommon.handler(
-            async () =>
-                this.getTransport().sendMail({ from, to, subject, html }),
+            async () => this.getTransport().sendMail({ from, to, subject, html }),
             () => null,
         );
     }

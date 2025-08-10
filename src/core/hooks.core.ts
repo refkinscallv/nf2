@@ -3,10 +3,7 @@
 import { HookFn, HookType, Subsystem } from '@type/core';
 
 export default class CoreHook {
-    private static hooks: Record<
-        Subsystem,
-        Partial<Record<HookType, HookFn[]>>
-    > = {
+    private static hooks: Record<Subsystem, Partial<Record<HookType, HookFn[]>>> = {
         system: {},
     };
 
