@@ -1,6 +1,6 @@
 {
     "name": "nf2",
-    "version": "1.0.0",
+    "version": "2.1.0",
     "description": "NF2 is A modular, opinionated, and lightweight backend framework for Node.js, built with TypeScript",
     "keywords": [
         "typescript",

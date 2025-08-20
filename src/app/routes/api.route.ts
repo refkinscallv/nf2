@@ -1,5 +1,5 @@
-import Route from '@core/route.core';
+import Route from '@core/route.core'
 
 // controllers
 
-Route.group('api', () => {});
+Route.group('api', () => {})
