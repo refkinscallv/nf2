@@ -102,26 +102,30 @@ export default class CoreTypeorm {
      * @return {Promise<void>} A promise that resolves when the seeder has been executed successfully.
      */
     public static async executeSeed<T extends ObjectLiteral>({ entity, data }: RunSeederType<T>) {
-        const repository = this.getRepository(entity)
-        const entityName = entity.name.replace(/(Entity)?$/i, '')
+      const repository = this.getRepository(entity)
+      const entityName = entity.name.replace(/(Entity)?$/i, '')
 
-        if (!Array.isArray(data) || !data.length) {
-            console.log(`[SEEDER] No data for ${entityName}, skipping`)
-            return
-        }
+      if (!Array.isArray(data) || !data.length) {
+          console.log(`[SEEDER] No data for ${entityName}, skipping`)
+          return
+      }
 
-        const tableName = repository.metadata.tableName
-        await repository.query(`TRUNCATE TABLE \`${tableName}\``)
+      const tableName = repository.metadata.tableName
 
-        const cleanData = data.map((row) => {
-            const { id, ...rest } = row as any
-            return rest
-        })
+      // Disable foreign key checks
+      await repository.query(`SET FOREIGN_KEY_CHECKS = 0;`)
+      await repository.query(`TRUNCATE TABLE \`${tableName}\``)
+      await repository.query(`SET FOREIGN_KEY_CHECKS = 1;`)
 
-        await repository.createQueryBuilder().insert().into(entity).values(cleanData).execute()
+      const cleanData = data.map((row) => {
+          const { id, ...rest } = row as any
+          return rest
+      })
 
-        console.log(`[SEEDER] '${entityName}' truncated & seeded successfully`)
-    }
+      await repository.createQueryBuilder().insert().into(entity).values(cleanData).execute()
+
+      console.log(`[SEEDER] '${entityName}' truncated & seeded successfully`)
+  }
 
     /**
      * Retrieves a TypeORM repository for a specific entity.
