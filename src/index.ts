@@ -5,7 +5,7 @@
  * @description A modular, opinionated, and lightweight backend framework for Node.js built with TypeScript, Express.js, and TypeORM
  * @author Refkinscallv
  * @repository https://github.com/refkinscallv/nf2
- * @version 2.1.0
+ * @version 2.2.1
  * @license MIT
  */
 import 'module-alias/register'
@@ -23,4 +23,6 @@ import CoreBoot from '@core/boot.core'
 /**
  * Bootstraps the application
  */
-CoreBoot.run()
+;(async () => {
+    await CoreBoot.run()
+})()

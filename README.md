@@ -49,6 +49,7 @@ APP_PORT=3456
 APP_URL=http://localhost:3456
 APP_NAME=NF2
 APP_TIMEZONE=UTC
+APP_DEBUG=off
 
 # ============================================
 # DATABASE CONFIGURATION

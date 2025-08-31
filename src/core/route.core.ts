@@ -5,17 +5,13 @@
  * @description A modular, opinionated, and lightweight backend framework for Node.js built with TypeScript, Express.js, and TypeORM
  * @author Refkinscallv
  * @repository https://github.com/refkinscallv/nf2
- * @version 2.1.0
+ * @version 2.2.1
  * @license MIT
  */
 import { Router, Request, Response, NextFunction } from 'express'
 import { HttpContext, RouteMethod, RouteHandler, RouteDefinition, RouteMiddleware } from '@type/core'
+import Logger from '@core/logger.core'
 
-/**
- * CoreRoute is a class that manages the routing system for the application.
- * It allows defining routes with various HTTP methods, applying middlewares, and organizing routes into groups.
- * It provides a flexible way to handle HTTP requests and responses in a structured manner.
- */
 export default class CoreRoute {
     private static routes: RouteDefinition[] = []
     private static prefix = ''
@@ -28,7 +24,7 @@ export default class CoreRoute {
 
     private static allMethods: RouteMethod[] = ['get', 'post', 'put', 'delete', 'patch', 'options', 'head']
 
-    public static add(methods: RouteMethod | RouteMethod[], path: string, handler: RouteHandler, middlewares: RouteMiddleware[] = []) {
+    public static add(methods: RouteMethod | RouteMethod[], path: string, handler: RouteHandler, middlewares: RouteMiddleware[] = []): void {
         const methodArray = Array.isArray(methods) ? methods : [methods]
         const fullPath = this.normalizePath(`${this.prefix}/${path}`)
 
@@ -40,29 +36,29 @@ export default class CoreRoute {
         })
     }
 
-    public static get(path: string, handler: RouteHandler, middlewares: RouteMiddleware[] = []) {
+    public static get(path: string, handler: RouteHandler, middlewares: RouteMiddleware[] = []): void {
         this.add('get', path, handler, middlewares)
     }
-    public static post(path: string, handler: RouteHandler, middlewares: RouteMiddleware[] = []) {
+    public static post(path: string, handler: RouteHandler, middlewares: RouteMiddleware[] = []): void {
         this.add('post', path, handler, middlewares)
     }
-    public static put(path: string, handler: RouteHandler, middlewares: RouteMiddleware[] = []) {
+    public static put(path: string, handler: RouteHandler, middlewares: RouteMiddleware[] = []): void {
         this.add('put', path, handler, middlewares)
     }
-    public static delete(path: string, handler: RouteHandler, middlewares: RouteMiddleware[] = []) {
+    public static delete(path: string, handler: RouteHandler, middlewares: RouteMiddleware[] = []): void {
         this.add('delete', path, handler, middlewares)
     }
-    public static patch(path: string, handler: RouteHandler, middlewares: RouteMiddleware[] = []) {
+    public static patch(path: string, handler: RouteHandler, middlewares: RouteMiddleware[] = []): void {
         this.add('patch', path, handler, middlewares)
     }
-    public static options(path: string, handler: RouteHandler, middlewares: RouteMiddleware[] = []) {
+    public static options(path: string, handler: RouteHandler, middlewares: RouteMiddleware[] = []): void {
         this.add('options', path, handler, middlewares)
     }
-    public static head(path: string, handler: RouteHandler, middlewares: RouteMiddleware[] = []) {
+    public static head(path: string, handler: RouteHandler, middlewares: RouteMiddleware[] = []): void {
         this.add('head', path, handler, middlewares)
     }
 
-    public static group(prefix: string, callback: () => void, middlewares: RouteMiddleware[] = []) {
+    public static group(prefix: string, callback: () => void, middlewares: RouteMiddleware[] = []): void {
         const prevPrefix = this.prefix
         const prevGroup = this.groupMiddlewares
 
@@ -74,7 +70,7 @@ export default class CoreRoute {
         this.groupMiddlewares = prevGroup
     }
 
-    public static middleware(middlewares: RouteMiddleware[], callback: () => void) {
+    public static middleware(middlewares: RouteMiddleware[], callback: () => void): void {
         const prevGlobal = this.globalMiddlewares
         this.globalMiddlewares = [...prevGlobal, ...middlewares]
         callback()
@@ -102,18 +98,18 @@ export default class CoreRoute {
         return undefined
     }
 
-    public static async apply(router: Router) {
+    public static async apply(router: Router): Promise<void> {
         for (const route of this.routes) {
             const handlerFn = this.resolveHandler(route.handler)
 
             if (!handlerFn) {
-                console.error(`[ROUTES] Invalid handler for route ${route.path}`)
+                Logger.error(`ROUTES - Invalid handler for route ${route.path}`)
                 continue
             }
 
             for (const method of route.methods) {
                 if (!this.allMethods.includes(method)) {
-                    console.error(`[ROUTES] Invalid method '${method}' for route ${route.path}`)
+                    Logger.error(`ROUTES - Invalid method '${method}' for route ${route.path}`)
                     continue
                 }
 
@@ -123,7 +119,7 @@ export default class CoreRoute {
                         const result = handlerFn(ctx)
                         if (result instanceof Promise) await result
                     } catch (err: any) {
-                        console.error(`[ROUTES] Error on ${method.toUpperCase()} ${route.path}:`, err.message)
+                        Logger.error(`ROUTES - Invalid method '${method}' for route ${route.path}`)
                         next(err)
                     }
                 })

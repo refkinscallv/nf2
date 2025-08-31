@@ -5,7 +5,7 @@
  * @description A modular, opinionated, and lightweight backend framework for Node.js built with TypeScript, Express.js, and TypeORM
  * @author Refkinscallv
  * @repository https://github.com/refkinscallv/nf2
- * @version 2.1.0
+ * @version 2.2.1
  * @license MIT
  */
 import { ObjectLiteral } from 'typeorm'
@@ -117,3 +117,72 @@ export type HookFn = () => void | Promise<void>
  * It represents a class constructor that can be instantiated with any number of arguments.
  */
 export type Constructor<T = any> = new (...args: any[]) => T
+
+export interface CoreCommonJson {
+    status?: boolean
+    code?: number
+    message?: string
+    result?: any
+    custom?: Partial<any>
+}
+
+// config defininition types
+export interface ExpressConfigView {
+    engine: string
+    path: string
+}
+
+export interface ExpressConfigStatic {
+    route: string
+    path: string
+}
+
+export interface GeneralCorsConfig {
+    origin?: boolean | string | RegExp | (string | RegExp)[] | ((origin: string | undefined, callback: (err: Error | null, allow?: boolean | string) => void) => void)
+    methods?: string | string[]
+    allowedHeaders?: string | string[]
+    exposedHeaders?: string | string[]
+    credentials?: boolean
+    maxAge?: number
+    preflightContinue?: boolean
+    optionsSuccessStatus?: number
+}
+
+export interface DatabaseConfigCommon {
+    entities: string | string[]
+    synchronize: boolean
+    logging: boolean
+    charset: string
+}
+
+export interface DatabaseConfigDefault {
+    host: string
+    port: number
+    username: string
+    password: string
+    database: string
+}
+
+export interface DatabaseConfigMySQL extends DatabaseConfigDefault {}
+
+export interface DatabaseConfigPostgreSQL extends DatabaseConfigDefault {
+    schema: string
+}
+
+export interface DatabaseConfigSQLite {
+    database: string
+}
+
+export interface DatabaseConfigMongoDB {
+    url: string
+    useUnifiedTopology: boolean
+}
+
+export interface DatabaseConfigOracle {
+    host: string
+    port: number
+    username: string
+    password: string
+    sid: string
+    connectString: string
+}

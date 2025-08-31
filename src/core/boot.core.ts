@@ -5,7 +5,7 @@
  * @description A modular, opinionated, and lightweight backend framework for Node.js built with TypeScript, Express.js, and TypeORM
  * @author Refkinscallv
  * @repository https://github.com/refkinscallv/nf2
- * @version 2.1.0
+ * @version 2.2.1
  * @license MIT
  */
 import CoreExpress from '@core/express.core'
@@ -13,33 +13,62 @@ import CoreServer from '@core/server.core'
 import CoreTypeorm from '@core/typeorm.core'
 import CoreHook from '@core/hooks.core'
 import CoreCommon from '@core/common.core'
+import Logger from '@core/logger.core'
+import figlet from 'figlet'
+import chalk from 'chalk'
 
-/**
- * Bootstraps the application by initializing core components.
- * It sets up the Express server, TypeORM connection, and system hooks.
- */
 export default class CoreBoot {
-    /**
-     * Runs the boot process for the application.
-     * It initializes the system hooks, TypeORM if enabled, and starts the Express server.
-     * @returns {Promise<void>} A promise that resolves when the boot process is complete.
-     * @throws {Error} If the boot process fails, an error is thrown with a descriptive message.
-     */
-    public static async run() {
-        console.log(`[BOOT] Boot the application`)
+    public static async run(): Promise<void> {
+        // sign start
+        const log = console.log
+        log('\n')
+        log(chalk.gray('============================================================'))
+        log('\n')
+        log(
+            chalk.cyan(
+                figlet.textSync('NF2', { font: 'Slant' })
+            )
+        )
+        log('\n')
+        log(chalk.yellow('NF2 is a modular, opinionated, and lightweight backend framework for Node.js built with TypeScript, Express.js, and TypeORM.'))
+        log(chalk.green('Author     : Refkinscallv (https://github.com/refkinscallv)'))
+        log(chalk.magenta('Repository : https://github.com/refkinscallv/nf2'))
+        log(chalk.blue('Version    : 2.2.1'))
+
+        log('\n')
+        log(chalk.gray('============================================================'))
+        log('\n')
+        // sign end
+
+        Logger.info('BOOT - Starting the application')
 
         try {
             await CoreHook.init('system', 'before')
+
             if (CoreCommon.env('DB_STATUS') === 'on') {
+                Logger.info('BOOT - Initializing database connection')
                 await CoreTypeorm.init()
+                Logger.info('BOOT - Database connection established')
+            } else {
+                Logger.debug('BOOT - Database initialization skipped (DB_STATUS=off)')
             }
 
+            Logger.info('BOOT - Initializing Express')
             CoreExpress.init()
-            CoreServer.init()
+            Logger.info('BOOT - Express initialized')
 
-            console.log(`[BOOT] Successfully booted the application`)
-        } catch (error: any | unknown) {
-            throw new Error(`[BOOT] Failed to boot the application: ${error?.message || error}`)
+            Logger.info('BOOT - Starting server')
+            CoreServer.init()
+            Logger.info('BOOT - Server started successfully')
+
+            Logger.info('BOOT - Application started successfully')
+        } catch (err) {
+            if (err instanceof Error) {
+                Logger.error(`BOOT - Failed to start application: ${err.message}`, err)
+            } else {
+                Logger.error('BOOT - Failed to start application: Unknown error', new Error(String(err)))
+            }
+            throw err
         }
     }
 }
